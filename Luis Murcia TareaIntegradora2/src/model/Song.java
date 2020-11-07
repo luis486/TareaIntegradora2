@@ -5,20 +5,21 @@ public class Song {
     private String nameArtist;
     private String date;
     private String durationSong;
+    private String genre;
 
     /**
      * Allows create constructor in the class Song <br>
      * <b> pre: </b><br>
      * <b> post </b> You has been created the constructor Song <br>
      * 
-     * @param title      title of the song, must be different null and must be a
-     *                   String
-     * @param nameArtist name the band or Artist, must be different null and must be
-     *                   a String
-     * @param date       date when the song was created, must be different null and
-     *                   must be a String
-     * @param duration   duration of the song, and must be different null and must
-     *                   be a String
+     * @param title        title of the song, must be different null and must be a
+     *                     String
+     * @param nameArtist   name the band or Artist, must be different null and must
+     *                     be a String
+     * @param date         date when the song was created, must be different null
+     *                     and must be a String
+     * @param durationSong duration of the song, and must be different null and must
+     *                     be a String with the format mm/ss
      */
     public Song(String title, String nameArtist, String date, String durationSong) {
         this.title = title;
@@ -79,7 +80,7 @@ public class Song {
      * <b> post </b> <br>
      * 
      * @param date date when the song was added, must be different null and must be
-     *             a String
+     *             a String with the format mm/dd/aa
      */
     public String getDate() {
         return date;
@@ -91,7 +92,7 @@ public class Song {
      * <b> post </b> <br>
      * 
      * @param date date when the song was created, must be different null and must
-     *             be a String
+     *             be a String with the format mm/dd/aa
      */
     public void setDate(String date) {
         this.date = date;
@@ -102,8 +103,8 @@ public class Song {
      * <b> pre: </b><br>
      * <b> post </b> <br>
      * 
-     * @param duration duration of the song, and must be different null and must be
-     *                 a String
+     * @param durationSong duration of the song, and must be different null and must
+     *                     be a String with the format mm/ss
      */
     public String getDurationSong() {
         return durationSong;
@@ -114,8 +115,8 @@ public class Song {
      * <b> pre: </b><br>
      * <b> post </b> <br>
      * 
-     * @param duration duration of the song, and must be different null and must be
-     *                 a String
+     * @param durationSong duration of the song, and must be different null and must
+     *                     be a String with the format mm/ss
      */
     public void setDurationSong(String durationSong) {
         this.durationSong = durationSong;
@@ -125,20 +126,33 @@ public class Song {
         return genre;
     }
 
-}
+    /**
+     * allows you to change the duration of the song, String to int <br>
+     * <b> pre: </b><br>
+     * <b> post </b> <br>
+     *
+     */
+    public int durationToSeconds() {
+        int secondsDuration = 0;
+        String[] durationParts = durationSong.split(":");
+        int min = Integer.parseInt(durationParts[0]);
+        int sec = Integer.parseInt(durationParts[0]);
+        secondsDuration = (min * 60) * sec;
+        return secondsDuration;
+    }
 
-/**
+    /**
      * allows you to seen carcateristics of the song <br>
      * <b> pre: </b><br>
      * <b> post </b> <br>
      */
-    public String showContents(){
-        String contents= "**************  Cancion **************"+"/n";
-                contents+="**  Titulo: "+getTitle()+"/n";
-                contents+="**  Artista: "+getNameArtist()+"/n";
-                contents+="**  Duracion: "+getDurationSong()+"/n";
-                contents+="**  Genero: " getGenre()+"/n";
-                contents+="***********************************"+"/n";
+    public String showContents() {
+        String contents = "**************  Cancion **************" + "/n";
+        contents += "**  Titulo: " + getTitle() + "/n";
+        contents += "**  Artista: " + getNameArtist() + "/n";
+        contents += "**  Duracion: " + getDurationSong() + "/n";
+        contents += "**  Genero: " + getGenre() + "/n";
+        contents += "***********************************" + "/n";
         return contents;
     }
 

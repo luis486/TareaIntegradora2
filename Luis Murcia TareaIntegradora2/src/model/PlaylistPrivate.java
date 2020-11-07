@@ -2,7 +2,7 @@ package model;
 
 public class PlaylistPrivate extends Playlist {
 
-    private String userOne;
+    private User userOne;
 
     /**
      * Allows create the constructor in the class playlist private <br>
@@ -12,9 +12,9 @@ public class PlaylistPrivate extends Playlist {
      * @param userOne one user, must be exist, different null and must be a String
      * 
      */
-    public PlaylistPrivate(String playlistName, String userOne) {
+    public PlaylistPrivate(String playlistName, String name, String password, int age) {
         super(playlistName);
-        this.userOne = userOne;
+        userOne = new User(name, password, age);
     }
 
     /**
@@ -24,7 +24,7 @@ public class PlaylistPrivate extends Playlist {
      * 
      * @param userOne one user, must be exist, different null and must be a String
      */
-    public String getUserOne() {
+    public User getUserOne() {
         return this.userOne;
     }
 
@@ -35,7 +35,7 @@ public class PlaylistPrivate extends Playlist {
      * 
      * @param userOne one user, must be exist, different null and must be a String
      */
-    public void setUserone(String userOne) {
+    public void setUserone(User userOne) {
         this.userOne = userOne;
     }
 

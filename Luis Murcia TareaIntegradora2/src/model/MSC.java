@@ -8,6 +8,7 @@ public class MSC {
     private Playlist[] playlist;
     private Song[] poolSong;
     private User[] user;
+    private Song song;
 
     public MSC() {
         playlist = new Playlist[PLAYLISTS];
@@ -56,7 +57,7 @@ public class MSC {
      * @param duration   duration of the song, and must be different null and must
      *                   be a String
      */
-    public String addSong(String title, String nameArtist, String date, String durationSong) {
+    public String addSong(String title, String nameArtist, String date, String durationSong, int chooseGenre) {
         String message = "";
         boolean added = false;
         Song song_new = new Song(title, nameArtist, date, durationSong);
@@ -80,10 +81,10 @@ public class MSC {
      * @param playlistName name playlist and must be an String and differente null
      * @param userOne      user allowed to modify playlist, must be different null
      */
-    public String addPlaylist(String playlistName, String userOne) {
+    public String addPlaylist(String playlistName, String name, String password, int age) {
         String message = "";
         boolean added = false;
-        PlaylistPrivate newPlaylist = new PlaylistPrivate(playlistName, userOne);
+        PlaylistPrivate newPlaylist = new PlaylistPrivate(playlistName, name, password, age);
         for (int i = 0; i < MAXIUMSHARES && !added; i++) {
             if (playlist[i] == null) {
                 playlist[i] = newPlaylist;
@@ -130,7 +131,7 @@ public class MSC {
      * @param userAllowed[] users alloweds to modify playlist, must be different
      *                      null
      */
-    public String addPlaylist(String playlistName, String[] userAllowed) {
+    public String addPlaylist(String playlistName, User[] userAllowed) {
         String message = "";
         boolean added = false;
         PlaylistRestricted newPlaylist = new PlaylistRestricted(playlistName, userAllowed);
@@ -172,10 +173,28 @@ public class MSC {
      * 
      * @param title title of the song, must be different null and must be a String
      */
-    public boolean findSong(String title) {
+    public Song findSong(String title) {
+        boolean found = false;
+        for (int i = 0; i < MAXIUMSHARES && !found; i++) {
+            if (poolSong[i].getTitle().equalsIgnoreCase(title)) {
+                song = poolSong[i];
+                found = true;
+            }
+        }
+        return song;
+    }
+
+    /**
+     * Allows find playlist <br>
+     * <b> pre: </b><br>
+     * <b> post </b> The playlist exist <br>
+     * 
+     * @param playlistName name playlist and must be an String and differente null
+     */
+    public boolean findPlaylist(String playlistName) {
         boolean exist = false;
-        for (int i = 0; i < MAXIUMSHARES; i++) {
-            if (poolSong[i].getTitle() == title) {
+        for (int i = 0; i < MAXIUMSHARES && !exist; i++) {
+            if (playlist[i].getPlaylistName() == playlistName) {
                 exist = true;
             }
         }
@@ -185,7 +204,7 @@ public class MSC {
     /**
      * Allows show users <br>
      * <b> pre: </b><br>
-     * <b> post </b> The users int the aplication are <br>
+     * <b> post </b> The users in the aplication are <br>
      */
     public String showUsers() {
         String messageUser = "Usuarios" + "/n";
@@ -226,4 +245,149 @@ public class MSC {
         }
         return messagePlay;
     }
+
+    /**
+     * Allows define type of the playlist <br>
+     * <b> pre: </b><br>
+     * <b> post </b> The playlist are private, restricted or public <br>
+     * 
+     * @param caracteristicPlaylist must be 1, 2 or 3
+     */
+    public int caracteristicPlaylist(String playlistName) {
+        int caracteristicPlaylist = 0;
+        boolean exist = false;
+        for (int i = 0; i < PLAYLISTS && !exist; i++) {
+            if (playlist[i].getPlaylistName() == playlistName) {
+                if (playlist[i] instanceof PlaylistPrivate) {
+                    caracteristicPlaylist = 1;
+                } else if (playlist[i] instanceof PlaylistRestricted) {
+                    caracteristicPlaylist = 2;
+                } else if (playlist[i] instanceof PlaylistPublic) {
+                    caracteristicPlaylist = 3;
+                }
+            }
+        }
+        return caracteristicPlaylist;
+    }
+
+    /**
+     * Allows add song in the playlist <br>
+     * <b> pre: </b><br>
+     * <b> post </b> The song was added to the play list <br>
+     * 
+     * @param songAdded The song can be added
+     */
+    public String addSongPL(String playlistName, Song song) {
+        PlaylistPrivate newPlaylistPrivate;
+        PlaylistRestricted newPlaylistRestricted;
+        PlaylistPublic newPlaylistPublic;
+
+        String songAdded = "La cancion no pudo ser añadida";
+        boolean found = false;
+        boolean added = false;
+        for (int i = 0; i < PLAYLISTS && !found; i++) {
+            if (playlist[i] instanceof PlaylistPrivate) {
+                newPlaylistPrivate = (PlaylistPrivate) playlist[i];
+                int duration = song.durationToSeconds();
+                newPlaylistPrivate.updateDurationPlaylist(duration);
+                newPlaylistPrivate.setDurationPlaylist();
+
+            } else if (playlist[i] instanceof PlaylistRestricted) {
+                newPlaylistRestricted = (PlaylistRestricted) playlist[i];
+                int duration = song.durationToSeconds();
+                newPlaylistRestricted.updateDurationPlaylist(duration);
+                newPlaylistRestricted.setDurationPlaylist();
+            } else if (playlist[i] instanceof PlaylistPublic) {
+                newPlaylistPublic = (PlaylistPublic) playlist[i];
+                int duration = song.durationToSeconds();
+                newPlaylistPublic.updateDurationPlaylist(duration);
+                newPlaylistPublic.setDurationPlaylist();
+            }
+            added = true;
+            songAdded = "La cancion se agrego correctamente";
+        }
+        if (added == false) {
+            songAdded += "La cancion no se encontro en el pool de canciones";
+        }
+        return songAdded;
+    }
+
+    /**
+     * Allows update genre in the playlist <br>
+     * <b> pre: </b><br>
+     * <b> post </b> The playlist has been update <br>
+     * 
+     * @param playlistName name playlist and must be an String and differente null
+     * @param song
+     */
+    public String updateGenrePlaylist(String playlistName, Song song) {
+        String update = "";
+        boolean playlistFound = false;
+        for (int i = 0; i < PLAYLISTS && !playlistFound; i++) {
+            if (playlist[i] != null && playlist[i].getPlaylistName().equalsIgnoreCase(playlistName)) {
+                update = playlist[i].updateGenre(song) + "/n";
+                playlistFound = true;
+                update = "La playlist ha sido actualizada";
+            }
+        }
+        return update;
+    }
+
+    /**
+     * Allows calificate the playlist when user enter there <br>
+     * <b> pre: </b><br>
+     * <b> post </b> This is the average calification <br>
+     * 
+     * @param playlistName name playlist and must be an String and differente null
+     * @param calification must be different null and must be an double
+     */
+    public String calificationPlaylist(String playlistName, double calification) {
+        String message = "La calificación de la playlist ha sido agregada";
+        boolean found = false;
+        PlaylistPublic newPlaylistPublic;
+        for (int i = 0; i < PLAYLISTS && !found; i++) {
+            if (playlist[i] != null && playlist[i].getPlaylistName().equalsIgnoreCase(playlistName)
+                    && playlist[i] instanceof PlaylistPublic) {
+                newPlaylistPublic = (PlaylistPublic) playlist[i];
+                newPlaylistPublic.setCountCalificationUsers();
+                newPlaylistPublic.setAverageCalification(calification);
+                message = "El promedio de la playlist es: " + newPlaylistPublic.getAverageCalification();
+            }
+        }
+        if (found == false) {
+            message = "La playlist no existe";
+        }
+        return message;
+    }
+
+    public String giveAccessUser(String name, String password, int age, String playlistName) {
+        String message = "";
+        boolean found = false;
+        PlaylistRestricted newPlaylistRestricted;
+        for (int i = 0; i < PLAYLISTS && !found; i++) {
+            playlist[i].getPlaylistName().equalsIgnoreCase(playlistName);
+            newPlaylistRestricted = (PlaylistRestricted) playlist[i];
+            message = newPlaylistRestricted.addAcessUser(name, password, age) + "/n";
+            found = true;
+            if (message.equalsIgnoreCase("Se agrego un nuevo usuario con acceso")) {
+                message = "Se le ha otorgado acceso a la playlist: " + newPlaylistRestricted.getPlaylistName()
+                        + (char) 34 + "al usuario" + name;
+            }
+        }
+        return message;
+    }
+
+    public String updateUserCategory(String username) {
+        String updated = "";
+        boolean found = false;
+        for (int i = 0; i < MAXIUMUSERS && !found; i++) {
+            if (user[i] != null && user[i].getName().equalsIgnoreCase(username)) {
+                found = true;
+                user[i].addSharedSong();
+                updated = user[i].setCategory();
+            }
+        }
+        return updated;
+    }
+
 }

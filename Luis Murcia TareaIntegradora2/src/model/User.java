@@ -24,6 +24,7 @@ public class User {
         this.name = name;
         this.password = password;
         this.age = age;
+        songsShared = 0;
         this.category = UCategory[0].name();
     }
 
@@ -117,7 +118,7 @@ public class User {
      * @param category only you can be, newbie, little contributor, mild contributor
      *                 and star contributor
      */
-    public void setCategory() {
+    public String setCategory() {
         this.songsShared++;
         if (this.songsShared < 3) {
             this.category = UCategory[0].name();
@@ -130,6 +131,28 @@ public class User {
         } else {
             this.category = UCategory[3].name();
         }
+        return category;
+    }
+
+    /**
+     * allows you to take the user's name <br>
+     * <b> pre: </b><br>
+     * <b> post </b> <br>
+     * 
+     * @param songsShared songs shared for the user
+     */
+    public int getSongsShared() {
+        return songsShared;
+    }
+
+    /**
+     * allows add shared song <br>
+     * <b> pre: </b><br>
+     * <b> post </b> <br>
+     */
+    public int addSharedSong() {
+        songsShared++;
+        return songsShared;
     }
 
     /**

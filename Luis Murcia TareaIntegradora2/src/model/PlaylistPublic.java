@@ -3,6 +3,9 @@ package model;
 public class PlaylistPublic extends Playlist {
 
     private double calification;
+    private double averageCalification;
+    private double countCalificationUsers;
+    private double rating;
 
     /**
      * Allows create the constructor in the class playlist public <br>
@@ -18,14 +21,14 @@ public class PlaylistPublic extends Playlist {
     }
 
     /**
-     * allows obtain average of calification for a playlist <br>
+     * allows obtain calification for a playlist <br>
      * <b> pre: </b><br>
      * <b> post </b> <br>
      * 
      * @param calification must be different null and must be an double
      */
     public double getCalification() {
-        return this.calification;
+        return calification;
     }
 
     /**
@@ -33,10 +36,37 @@ public class PlaylistPublic extends Playlist {
      * <b> pre: </b><br>
      * <b> post </b> <br>
      * 
-     * @param calification mustb be different null and must be an double
+     * @param calification must be different null and must be an double
      */
     public void setCalification(double calification) {
         this.calification = calification;
+    }
+
+    /**
+     * allows obtain average of calification for a playlist <br>
+     * <b> pre: </b><br>
+     * <b> post </b> <br>
+     * 
+     * @param averageCalification must be different null and must be an double
+     */
+    public double getAverageCalification() {
+        return averageCalification;
+    }
+
+    public void setAverageCalification(double calification) {
+        rating += calification;
+        averageCalification = rating / countCalificationUsers;
+    }
+
+    /**
+     * When the people enter, can calificate playlist <br>
+     * <b> pre: </b><br>
+     * <b> post </b> <br>
+     * 
+     * @param countCalificationUsers must be different null and must be an double
+     */
+    public void setCountCalificationUsers() {
+        countCalificationUsers++;
     }
 
     /**

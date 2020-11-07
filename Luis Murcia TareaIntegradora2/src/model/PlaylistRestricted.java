@@ -3,7 +3,7 @@ package model;
 public class PlaylistRestricted extends Playlist {
 
     private final static int MAX_USERS_ALLOWED = 5;
-    private String[] userAllowed;
+    private User[] userAllowed;
 
     /**
      * Allows create the constructor in the class playlist restricted <br>
@@ -11,12 +11,13 @@ public class PlaylistRestricted extends Playlist {
      * <b> post </b> The constructor has been created <br>
      * 
      * @param userAllowed[] one user, must be exist, different null and must be a
-     *                      String
+     *                      User
      * 
      */
-    public PlaylistRestricted(String playlistName, String[] userAllowed) {
+    public PlaylistRestricted(String playlistName, User[] userAllowed) {
         super(playlistName);
         this.userAllowed = userAllowed;
+
     }
 
     /**
@@ -25,9 +26,9 @@ public class PlaylistRestricted extends Playlist {
      * <b> post </b> <br>
      * 
      * @param userAllowed[] one user, must be exist, different null and must be a
-     *                      String
+     *                      User
      */
-    public String[] getUserAllowed() {
+    public User[] getUserAllowed() {
         return this.userAllowed;
     }
 
@@ -37,9 +38,9 @@ public class PlaylistRestricted extends Playlist {
      * <b> post </b> <br>
      * 
      * @param userAllowed[] one user, must be exist, different null and must be a
-     *                      String
+     *                      User
      */
-    public void setUserAllowed(String[] userAllowed) {
+    public void setUserAllowed(User[] userAllowed) {
         this.userAllowed = userAllowed;
     }
 
@@ -49,6 +50,7 @@ public class PlaylistRestricted extends Playlist {
      * <b> post </b> <br>
      * 
      */
+
     public String showUsers() {
         String message = "Usuarios Autorizados:" + "/n";
         for (int i = 0; i < MAX_USERS_ALLOWED; i++) {
@@ -57,6 +59,39 @@ public class PlaylistRestricted extends Playlist {
             }
         }
         return message;
+    }
+
+    /**
+     * allow the users to modify the play list <br>
+     * <b> pre: </b><br>
+     * <b> post </b> <br>
+     * 
+     */
+    public String addAcessUser(String name, String password, int age) {
+        String message = "El usuario no existe";
+        User newUser = new User(name, password, age);
+        boolean added = false;
+        for (int i = 0; i < MAX_USERS_ALLOWED && !added; i++) {
+            if (userAllowed[i] == null) {
+                userAllowed[i] = newUser;
+                added = true;
+                message = "Se agrego un nuevo usuario";
+            }
+            if (added = false) {
+                message = "Se ha llegado al limite de usuarios permitidos";
+            }
+        }
+        return message;
+    }
+
+    public String showAcessUsers() {
+        String users = "";
+        for (int i = 0; i < MAX_USERS_ALLOWED; i++) {
+            if (userAllowed[i] != null) {
+                users += userAllowed[i].getName();
+            }
+        }
+        return users;
     }
 
     /**
